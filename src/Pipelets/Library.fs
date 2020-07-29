@@ -116,6 +116,8 @@ module DateTime =
     let epochTime (d: DateTime) =
         Convert.ToInt32((d - DateTime.UnixEpoch).TotalSeconds)
 
+    let add (ts:TimeSpan) (d:DateTime) =
+        d.Add ts
 
 
 module Int32 =
