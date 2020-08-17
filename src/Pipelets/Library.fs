@@ -50,6 +50,11 @@ module String =
     let ifNullOrEmpty f1 f2 s =
         if String.IsNullOrEmpty s then f1 s else f2 s
 
+    let isNullOrEmptyR desc s =
+        if String.IsNullOrEmpty s
+        then sprintf "%s is null or empty" desc |> Error
+        else Ok s
+
     let trim (s: string) =
         if String.IsNullOrEmpty s then s else s.Trim()
 
@@ -116,8 +121,7 @@ module DateTime =
     let epochTime (d: DateTime) =
         Convert.ToInt32((d - DateTime.UnixEpoch).TotalSeconds)
 
-    let add (ts:TimeSpan) (d:DateTime) =
-        d.Add ts
+    let add (ts: TimeSpan) (d: DateTime) = d.Add ts
 
 
 module Int32 =
@@ -192,7 +196,7 @@ module Print =
 
 module NonEmptyString =
 
-    type NonEmptyString = private | NonEmptyString of String
+    type NonEmptyString = private NonEmptyString of String
 
     module NonEmptyString =
 
