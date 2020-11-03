@@ -63,7 +63,8 @@ module String =
 
     let private regexWhitespace = new Regex(@"\s+")
 
-    let removeWhitespace (s: String) = regexWhitespace.Replace(s, String.Empty)
+    let removeWhitespace (s: String) =
+        if String.IsNullOrEmpty s then s else regexWhitespace.Replace(s, String.Empty)
 
     let split (c: Char) (s: String) = s.Split c |> List.ofArray
 
