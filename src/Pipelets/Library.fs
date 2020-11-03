@@ -66,7 +66,8 @@ module String =
     let removeWhitespace (s: String) =
         if String.IsNullOrEmpty s then s else regexWhitespace.Replace(s, String.Empty)
 
-    let split (c: Char) (s: String) = s.Split c |> List.ofArray
+    let split (c: Char) (s: String) =
+        if isNull s then [] else s.Split c |> List.ofArray
 
     let caseInsensitiveEquals a b =
         String.Equals(a, b, StringComparison.InvariantCultureIgnoreCase)
