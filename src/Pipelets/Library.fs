@@ -29,7 +29,8 @@ module Result =
     let tryTo f x =
         try
             f x |> Ok
-        with e -> Error e.Message
+        with
+        | e -> Error e.Message
 
 
 module String =
@@ -37,43 +38,69 @@ module String =
     open System.Text.RegularExpressions
 
     let toUpper (s: string) =
-        if String.IsNullOrEmpty s then s else s.ToUpper()
+        if String.IsNullOrEmpty s then
+            s
+        else
+            s.ToUpper()
 
     let toLower (s: string) =
-        if String.IsNullOrEmpty s then s else s.ToLower()
+        if String.IsNullOrEmpty s then
+            s
+        else
+            s.ToLower()
 
     let toTitleCase (s: string) =
-        if String.IsNullOrEmpty s
-        then s
-        else Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase s
+        if String.IsNullOrEmpty s then
+            s
+        else
+            Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase s
 
     let ifNullOrEmpty f1 f2 s =
-        if String.IsNullOrEmpty s then f1 s else f2 s
+        if String.IsNullOrEmpty s then
+            f1 s
+        else
+            f2 s
 
     let isNullOrEmptyR desc s =
-        if String.IsNullOrEmpty s
-        then sprintf "%s is null or empty" desc |> Error
-        else Ok s
+        if String.IsNullOrEmpty s then
+            sprintf "%s is null or empty" desc |> Error
+        else
+            Ok s
 
     let trim (s: string) =
-        if String.IsNullOrEmpty s then s else s.Trim()
+        if String.IsNullOrEmpty s then
+            s
+        else
+            s.Trim()
 
     let contains (needle: string) (haystack: String) =
-        if String.IsNullOrEmpty haystack then false else haystack.Contains needle
+        if String.IsNullOrEmpty haystack then
+            false
+        else
+            haystack.Contains needle
 
     let private regexWhitespace = new Regex(@"\s+")
 
     let removeWhitespace (s: String) =
-        if String.IsNullOrEmpty s then s else regexWhitespace.Replace(s, String.Empty)
+        if String.IsNullOrEmpty s then
+            s
+        else
+            regexWhitespace.Replace(s, String.Empty)
 
     let split (c: Char) (s: String) =
-        if isNull s then [] else s.Split c |> List.ofArray
+        if isNull s then
+            []
+        else
+            s.Split c |> List.ofArray
 
     let caseInsensitiveEquals a b =
         String.Equals(a, b, StringComparison.InvariantCultureIgnoreCase)
 
     let toOption s =
-        if String.IsNullOrEmpty s then None else Some s
+        if String.IsNullOrEmpty s then
+            None
+        else
+            Some s
 
 
 module Option =
@@ -96,7 +123,8 @@ module Option =
     let (<!!>) = Option.map
     let (<**>) = apply
 
-    let mapDefault f none = Option.map f >> Option.defaultValue none
+    let mapDefault f none =
+        Option.map f >> Option.defaultValue none
 
 module Guid =
 
@@ -135,14 +163,16 @@ module Int32 =
 
 module Boolean =
 
-    let parseToResult e (s: String) = Boolean.TryParse s |> Result.fromByRef e
+    let parseToResult e (s: String) =
+        Boolean.TryParse s |> Result.fromByRef e
 
     let parseToOption (s: String) = Boolean.TryParse s |> Option.fromByRef
 
 
 module Decimal =
 
-    let parseToResult e (s: String) = Decimal.TryParse s |> Result.fromByRef e
+    let parseToResult e (s: String) =
+        Decimal.TryParse s |> Result.fromByRef e
 
     let parseSafely default_ (s: String) =
         parseToResult "" s |> Result.either id default_
@@ -203,7 +233,10 @@ module NonEmptyString =
     module NonEmptyString =
 
         let create s =
-            if String.IsNullOrEmpty s then None else NonEmptyString s |> Some
+            if String.IsNullOrEmpty s then
+                None
+            else
+                NonEmptyString s |> Some
 
         let unwrap (NonEmptyString s) = s
 
